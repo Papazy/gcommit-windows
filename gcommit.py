@@ -2,102 +2,145 @@ import git
 import os
 import sys
 import google.generativeai as genai
+import time
+import threading
+from datetime import datetime
 
 model_name = "gemini-1.5-flash-002"
 
+class LoadingSpinner:
+    def __init__(self, message="Loading"):
+        self.spinner_chars = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
+        self.message = message
+        self.spinning = False
+        self.thread = None
+    
+    def spin(self):
+        while self.spinning:
+            for char in self.spinner_chars:
+                if not self.spinning:
+                    break
+                print(f"\r{char} {self.message}...", end="", flush=True)
+                time.sleep(0.1)
+    
+    def start(self):
+        self.spinning = True
+        self.thread = threading.Thread(target=self.spin)
+        self.thread.start()
+    
+    def stop(self):
+        self.spinning = False
+        if self.thread:
+            self.thread.join()
+        print("\r" + " " * (len(self.message) + 10), end="\r")
+
 def generate_commit_message(push=False, remote_name=None, branch_name=None):
-  # Mendapatkan API KEY
-  api_key = os.getenv("GOOGLE_API_KEY")
-  if not api_key:
-    print("Error: GOOGLE_API_KEY environment variable is not set.")
-    sys.exit(1)
+    print("\n┌─────────────────────────────────────────┐")
+    print("│ 🤖 GCOMMIT - AI Git Commit Generator    │")
+    print("└─────────────────────────────────────────┘\n")
 
-  # Inisialisasi klien Google Generative AI
-  genai.configure(api_key=api_key)
-  model = genai.GenerativeModel(model_name=model_name)
+    # API Key validation
+    api_key = os.getenv("GOOGLE_API_KEY")
+    if not api_key:
+        print(" ❌ Error: GOOGLE_API_KEY not set")
+        sys.exit(1)
 
-  try:
-    # mendapatkan repo
-    repo = git.Repo('.')
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel(model_name=model_name)
 
-    # memastikan repo valid
-    if not repo.git.rev_parse('--is-inside-work-tree'):
-      print("Error: Not a valid git repository.")
-      print("Please run this script inside a git repository.")
-      sys.exit(1)
+    try:
+        repo = git.Repo('.')
+        if not repo.git.rev_parse('--is-inside-work-tree'):
+            print(" ❌ Error: Not a valid git repository")
+            sys.exit(1)
+    except git.InvalidGitRepositoryError:
+        print(" ❌ Error: Not a valid git repository")
+        sys.exit(1)
+    except Exception as e:
+        print(f" ❌ Error: {e}")
+        sys.exit(1)
 
-  except git.InvalidGitRepositoryError:
-    print("Error: Not a valid git repository.")
-    print("Please run this script inside a git repository.")
-    sys.exit(1)
-  except Exception as e:
-    print(f"Error: {e}")
-    sys.exit(1)
+    # Get changes
+    changes = repo.git.diff('HEAD', cached=True, name_only=True).splitlines()
+    if not changes:
+        print(" ⚠️ No staged changes found")
+        print(" 💡 Use 'git add' to stage changes first")
+        sys.exit(0)
 
-  # mendapatkan daftar perubahan
-  changes = repo.git.diff('HEAD', name_only=True).splitlines()
+    print(f" 📁 Files to commit: {len(changes)}")
+    for file in changes[:3]:
+        print(f"    • {file}")
+    if len(changes) > 3:
+        print(f"    • ...and {len(changes) - 3} more files")
 
-  if not changes:
-    print("No changes to commit.")
-    print("Please 'git add ' some changes before running this script.")
-    sys.exit(0)  # Keluar tanpa error karena tidak ada yang perlu di-commit
+    # Generate commit message
+    spinner = LoadingSpinner("Generating commit message")
+    spinner.start()
 
-  # membuat prompt untuk OpenAI
-  prompt_text = f"""Berikut adalah perubahan kode Git (git diff) yang telah dilakukan: {changes} 
-  Hasilkan pesan commit Git yang singkat, ringkas, informatif, dan deskriptif berdasarkan perubahan di atas.
-  Pesan commit harus mematuhi format Conventional Commits (misal: "feat:", "fix:", "docs:", "chore:", "refactor:").
-  Contoh:
-  feat: Tambahkan fitur otentikasi pengguna
-  fix: Perbaiki bug pada fungsi login
-  docs: Perbarui dokumentasi README
+    diff_details = repo.git.diff('HEAD', cached=True)
+    prompt_text = f"""Create a concise commit message for these changes:
+Files changed: {changes}
+Diff: {diff_details[:1500]}
 
-  Mohon sertakan hanya pesan commit, tanpa penjelasan tambahan atau header"""
+Use Conventional Commits format (e.g., feat:, fix:, docs:)
+Keep it under 60 characters
+Example: feat: add user authentication system
 
-  # mengirim permintaan ke OpenAI
-  try:
-    print("Mengirim permintaan ke API Gemini untuk menghasilkan pesan commit...")
-    response = model.generate_content(prompt_text)
+Return only the commit message:"""
 
-    commit_message = response.text.strip()
-    print("\n--- Pesan Commit yang Disarankan ---")
-    print(commit_message)
-    print("------------------------------------")
+    try:
+        response = model.generate_content(prompt_text)
+        spinner.stop()
+        
+        commit_message = response.text.strip()
+        print("\n┌─ Suggested Commit Message ─────────────┐")
+        print(f"│ {commit_message:<35} │")
+        print("└───────────────────────────────────────┘\n")
 
-    confirm = input("Apakah Anda ingin menggunakan pesan commit ini? (y/n): ").strip().lower()
-    if confirm == 'y':
-      # Melakukan commit dengan pesan yang dihasilkan
-      repo.index.commit(commit_message)
-      print("Commit berhasil dilakukan")
+        confirm = input("Use this message? [Y/n]: ").strip().lower()
+        if confirm in ['', 'y', 'yes']:
+            # Perform commit
+            spinner = LoadingSpinner("Committing changes")
+            spinner.start()
+            repo.index.commit(commit_message)
+            spinner.stop()
+            print(" ✅ Commit successful!")
 
-      # Push jika argumen push=True
-      if push:
-        if not remote_name or not branch_name:
-          print("Error: Remote name and branch name must be specified for push.")
-          sys.exit(1)
+            # Handle push if requested
+            if push:
+                if not remote_name or not branch_name:
+                    print(" ❌ Error: Remote and branch required for push")
+                    sys.exit(1)
 
-        print(f"Melakukan push ke {remote_name} {branch_name}...")
-        repo.git.push(remote_name, branch_name)
-        print("Push berhasil dilakukan.")
-    else:
-      print("Commit dibatalkan. Silakan masukkan pesan commit secara manual jika diperlukan.")
-  except Exception as e:
-    print(f"Error saat berkomunikasi dengan API Gemini: {e}")
-    sys.exit(1)
+                spinner = LoadingSpinner(f"Pushing to {remote_name}/{branch_name}")
+                spinner.start()
+                repo.git.push(remote_name, branch_name)
+                spinner.stop()
+                print(f" ✅ Pushed to {remote_name}/{branch_name}")
+        else:
+            print(" ⚠️ Commit cancelled")
+            print(f" 💡 Manual commit: git commit -m \"{commit_message}\"")
 
-  git.Repo.close(repo)  # Menutup repo untuk menghindari kebocoran memori
+    except Exception as e:
+        spinner.stop()
+        print(f" ❌ Error: {str(e)[:100]}")
+        sys.exit(1)
+
+    finally:
+        git.Repo.close(repo)
 
 if __name__ == "__main__":
-  # Memproses argumen dari command line
-  push_flag = '--push' in sys.argv
-  remote_name = None
-  branch_name = None
+    push_flag = '--push' in sys.argv
+    remote_name = None
+    branch_name = None
 
-  if push_flag:
-    try:
-      remote_name = sys.argv[sys.argv.index('--push') + 1]
-      branch_name = sys.argv[sys.argv.index('--push') + 2]
-    except IndexError:
-      print("Error: Remote name and branch name must be specified after '--push'.")
-      sys.exit(1)
+    if push_flag:
+        try:
+            remote_name = sys.argv[sys.argv.index('--push') + 1]
+            branch_name = sys.argv[sys.argv.index('--push') + 2]
+        except IndexError:
+            print(" ❌ Error: Missing remote/branch after --push")
+            print(" 💡 Usage: gcommit --push <remote> <branch>")
+            sys.exit(1)
 
-  generate_commit_message(push=push_flag, remote_name=remote_name, branch_name=branch_name)
+    generate_commit_message(push=push_flag, remote_name=remote_name, branch_name=branch_name)
