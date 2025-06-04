@@ -26,6 +26,9 @@ cd gcommit
 > **Catatan**: Ganti `username` dengan nama pengguna GitHub yang sesuai jika URL berbeda.
 
 
+lalu jalankan 
+```pip install GitPython google-generativeai```
+
 ---
 
 ## 3. Dapatkan dan Atur Google Gemini API Key
