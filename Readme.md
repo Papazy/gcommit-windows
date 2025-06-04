@@ -25,28 +25,10 @@ cd gcommit
 
 > **Catatan**: Ganti `username` dengan nama pengguna GitHub yang sesuai jika URL berbeda.
 
----
-
-## 3. Buat Virtual Environment dan Instal Dependensi
-
-### Buat Virtual Environment
-Jalankan perintah berikut untuk membuat dan mengaktifkan virtual environment:
-
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-### Instal Dependensi
-Dengan virtual environment aktif, instal library Python yang diperlukan untuk gcommit:
-
-```bash
-pip install -r requirements.txt
-```
 
 ---
 
-## 4. Dapatkan dan Atur Google Gemini API Key
+## 3. Dapatkan dan Atur Google Gemini API Key
 
 gcommit membutuhkan API Key dari Google Gemini untuk berkomunikasi dengan model AI.
 
@@ -68,7 +50,7 @@ gcommit membutuhkan API Key dari Google Gemini untuk berkomunikasi dengan model 
 
 ---
 
-## 5. Tambahkan Folder ke PATH Sistem
+## 4. Tambahkan Folder ke PATH Sistem
 
 Langkah ini memungkinkan Anda menjalankan `gcommit` dari mana saja.
 
