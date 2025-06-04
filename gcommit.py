@@ -143,4 +143,5 @@ if __name__ == "__main__":
             print(" 💡 Usage: gcommit --push <remote> <branch>")
             sys.exit(1)
 
+    # Ini adalah command
     generate_commit_message(push=push_flag, remote_name=remote_name, branch_name=branch_name)
