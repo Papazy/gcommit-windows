@@ -4,7 +4,7 @@ Panduan ini menjelaskan cara menginstal dan menggunakan **gcommit**, pembantu co
 
 ## 🐧 Ubuntu Version
 
-Untuk Ubuntu, bisa lihat di [MhmmdIchsan](https://github.com/MhmmdIchsan/gcommit-ubuntu/gcommit-macOS)
+Untuk Ubuntu, bisa lihat di [MhmmdIchsan/gcommit-ubuntu](https://github.com/MhmmdIchsan/gcommit-ubuntu)
 
 ## 🍎 MacOS Version
 
