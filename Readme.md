@@ -2,9 +2,17 @@
 
 Panduan ini menjelaskan cara menginstal dan menggunakan **gcommit**, pembantu commit Git berbasis AI, di Windows menggunakan **Python virtual environment (venv)** dan Gemini AI .
 
----
+## 🐧 Ubuntu Version
 
-## 📦 Prasyarat
+Untuk Ubuntu, bisa lihat di [MhmmdIchsan](https://github.com/MhmmdIchsan/gcommit-ubuntu/gcommit-macOS)
+
+## 🍎 MacOS Version
+
+Untuk MacOS, bisa lihat di [GhufranBkri/gcommit-macOS](https://github.com/GhufranBkri/gcommit-macOS)
+
+
+
+# 📦 Prasyarat
 
 Pastikan sistem Anda memiliki:
 
