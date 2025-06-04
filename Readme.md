@@ -14,27 +14,34 @@ Buka **Command Prompt** atau **PowerShell** untuk menjalankan semua perintah ber
 
 ---
 
-## 2. Buat Folder Proyek dan Virtual Environment
+## 2. Clone Repository gcommit
 
-### Buat Folder untuk gcommit
-Jalankan perintah berikut untuk membuat folder khusus:
+Clone repository gcommit ke komputer Anda menggunakan perintah berikut:
 
 ```bash
-mkdir D:\gcommit-tool
-cd D:\gcommit-tool
+git clone https://github.com/username/gcommit.git
+cd gcommit
 ```
 
-> **Catatan**: Anda dapat mengganti `D:\gcommit-tool` dengan lokasi lain, misalnya `C:\Users\NamaAnda\gcommit-tool`.
-
+> **Catatan**: Ganti `username` dengan nama pengguna GitHub yang sesuai jika URL berbeda.
 
 ---
 
-## 3. Instal Dependensi
+## 3. Buat Virtual Environment dan Instal Dependensi
 
+### Buat Virtual Environment
+Jalankan perintah berikut untuk membuat dan mengaktifkan virtual environment:
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+### Instal Dependensi
 Dengan virtual environment aktif, instal library Python yang diperlukan untuk gcommit:
 
 ```bash
-pip install GitPython google-generativeai
+pip install -r requirements.txt
 ```
 
 ---
@@ -61,15 +68,14 @@ gcommit membutuhkan API Key dari Google Gemini untuk berkomunikasi dengan model 
 
 ---
 
-
 ## 5. Tambahkan Folder ke PATH Sistem
 
-Langkah ini memungkinkan Anda menjalankan `gcommit.bat` dari mana saja.
+Langkah ini memungkinkan Anda menjalankan `gcommit` dari mana saja.
 
 1. Cari **"Edit the system environment variables"** di Start Menu.
 2. Klik tombol **Environment Variables...**.
 3. Di bagian **User variables**, pilih variabel `Path` dan klik **Edit...**.
-4. Klik **New** dan tambahkan path lengkap ke folder `gcommit-tool` Anda (misalnya, `D:\gcommit-tool\`).
+4. Klik **New** dan tambahkan path lengkap ke folder `gcommit` Anda (misalnya, `D:\gcommit\`).
 5. Klik **OK** pada semua jendela.
 
 > **Penting**: Tutup dan buka kembali Command Prompt/PowerShell agar perubahan PATH berlaku.
