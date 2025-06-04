@@ -124,21 +124,16 @@ Langkah ini memungkinkan Anda menjalankan `gcommit` dari mana saja.
   gcommit
   ```
 
-4. Jalankan gcommit dengan opsi `--push` untuk generate pesan commit dan push otomatis:
-  ```batch
-  gcommit --push
-  ```
-
-5. Jalankan gcommit dengan opsi `--push origin main` untuk generate pesan commit dan push ke origin tertentu:
+4. Jalankan gcommit dengan opsi `--push origin main` untuk generate pesan commit dan push ke origin tertentu:
   ```batch
   gcommit --push origin main
   ```
 
-6. Ikuti instruksi di terminal:
+5. Ikuti instruksi di terminal:
   - Tekan `y` untuk menggunakan pesan commit yang disarankan
   - Tekan `n` untuk membatalkan
 
-7. (opsional) push ke GitHub jika belum menggunakan opsi `--push`:
+6. (opsional) push ke GitHub jika belum menggunakan opsi `--push`:
   ```batch
   git push
   ```
