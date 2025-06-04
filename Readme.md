@@ -1,59 +1,89 @@
+# 🤖 gcommit untuk Windows dengan Virtual Environment
 
-# Panduan Instalasi gcommit di Windows
-
-Ikuti langkah-langkah berikut untuk mengatur alat gcommit di sistem operasi Windows.
-
-## 1. Persiapan Awal
-
-Sebelum memulai, pastikan Anda memiliki **Python** dan **Git** terinstal di komputer Anda.
-
-- **Python 3.x**: Jika belum terinstal, unduh dari [python.org](https://www.python.org). Pastikan mencentang opsi "Add Python to PATH" saat instalasi.
-- **Git**: Unduh dari [git-scm.com](https://git-scm.com/download/win) dan ikuti instruksi default.
-
-Buka **Command Prompt** atau **PowerShell** untuk menjalankan semua perintah berikut. Anda dapat mencarinya di Start Menu.
+Panduan ini menjelaskan cara menginstal dan menggunakan **gcommit**, pembantu commit Git berbasis AI, di Windows menggunakan **Python virtual environment (venv)** dan Gemini AI .
 
 ---
 
-## 2. Clone Repository gcommit
+## 📦 Prasyarat
 
-Clone repository gcommit ke komputer Anda menggunakan perintah berikut:
+Pastikan sistem Anda memiliki:
 
-```bash
-git clone https://github.com/username/gcommit.git
-cd gcommit
+- **Python 3.x**
+- **Git**
+
+Jika belum, install:
+
+1. Unduh Python dari [python.org](https://www.python.org/downloads/)
+2. Unduh Git dari [git-scm.com](https://git-scm.com/download/windows)
+
+Verifikasi instalasi di Command Prompt:
+```batch
+python --version
+git --version
 ```
 
-> **Catatan**: Ganti `username` dengan nama pengguna GitHub yang sesuai jika URL berbeda.
+---
 
 
-lalu jalankan 
-```pip install GitPython google-generativeai```
 
 ---
 
-## 3. Dapatkan dan Atur Google Gemini API Key
+## 🗂️ 1. Clone Folder Proyek dan Simpan gcommit
 
-gcommit membutuhkan API Key dari Google Gemini untuk berkomunikasi dengan model AI.
+```batch
+# Clone repository di direktori pilihan Anda
+git clone https://github.com/Papazy/gcommit-windows
+```
+---
 
-### Dapatkan API Key
-1. Buka [Google AI Studio](https://ai.google.com/studio) di browser Anda.
-2. Login dengan akun Google Anda.
-3. Klik **"Get API key"** di bagian kiri.
-4. Klik **"Create API key in new project"** dan salin key yang muncul (diawali dengan `AIza...`).
+## 🧪 2. Menyiapkan Virtual Environment (venv)
 
-### Atur API Key sebagai Variabel Lingkungan
-1. Cari **"Edit the system environment variables"** di Start Menu Windows dan klik.
-2. Pada jendela **System Properties**, klik tombol **Environment Variables...**.
-3. Di bagian **User variables**, klik **New...**.
-  - **Variable name**: `GOOGLE_API_KEY`
-  - **Variable value**: Tempel API Key yang sudah disalin.
-4. Klik **OK** pada semua jendela.
+Buat virtual environment dengan menjalankan command berikut
 
-> **Penting**: Tutup dan buka kembali Command Prompt/PowerShell agar perubahan variabel lingkungan berlaku.
+```batch
+python -m venv venv
+```
+
 
 ---
 
-## 4. Tambahkan Folder ke PATH Sistem
+## 📥 3. Aktifkan venv dan Install Dependencies
+
+### Aktifkan virutal enviroment dengan command
+```batch
+.\venv\Scripts\activate
+```
+
+### Install paket yang diperlukan
+```batch
+pip install GitPython google-generativeai
+```
+
+---
+
+## 🔐 4. Tambahkan Google Gemini API Key
+
+Untuk menggunakan Gemini AI di gcommit, Anda memerlukan API Key.
+
+### Cara mendapatkan API Key:
+1. Kunjungi [Google AI Studio](https://ai.google.com/studio)
+2. Login dengan akun Google Anda
+3. Klik **"Get API key"** → **"Create API key in new project"**
+4. Salin API Key yang diberikan (diawali dengan `AIza...`)
+
+### Tambahkan API Key ke Environment Variables Windows:
+
+1. Di pencarian windows ketik `Edit the system environment variables`, lalu klik
+2. Buka tab "Advanced" → "Environment Variables"
+3. Di bagian "User variables", klik "New"
+4. Set Variable name: `GOOGLE_API_KEY`
+5. Set Variable value: API key Anda
+6. Klik "OK" untuk menyimpan
+
+---
+
+
+## 5. Tambahkan Folder ke PATH Sistem
 
 Langkah ini memungkinkan Anda menjalankan `gcommit` dari mana saja.
 
@@ -67,20 +97,50 @@ Langkah ini memungkinkan Anda menjalankan `gcommit` dari mana saja.
 
 ---
 
-## Cara Menggunakan gcommit
+## 🚀 Cara Menggunakan gcommit
 
-1. Buka Command Prompt atau PowerShell.
-2. Pindah ke direktori proyek Git Anda:
-  ```bash
-  cd C:\Users\NamaAnda\Documents\MyAwesomeProject
-  ```
-3. Lakukan staging perubahan:
-  ```bash
-  git add .
-  ```
-4. Jalankan alat gcommit:
-  ```bash
-  gcommit
-  ```
+1. Buka Command Prompt dan navigasi ke proyek Git Anda:
+   ```batch
+   cd folder-proyek-anda
+   ```
 
-gcommit akan menampilkan pesan commit yang disarankan oleh AI. Ketik `y` untuk melakukan commit atau `n` untuk membatalkannya.
+2. Stage perubahan:
+   ```batch
+   git add .
+   ```
+
+3. Jalankan gcommit:
+   ```batch
+   gcommit
+   ```
+
+4. Ikuti instruksi di terminal:
+   - Tekan `y` untuk menggunakan pesan commit yang disarankan
+   - Tekan `n` untuk membatalkan
+
+5. (opsional) push ke github
+  ```batch
+  git push
+  ```
+---
+
+## 🧠 Tips
+
+- Anda bisa menggunakan file `.env` sebagai alternatif environment variables
+- Buat file batch berbeda seperti `gcommit-dev.bat`, `gcommit-prod.bat` untuk multiple environment
+
+---
+
+## ✅ Struktur Folder yang Disarankan
+
+```
+C:\Users\NamaUser\
+└── Documents\
+    └── gcommit-windows\
+        ├── gcommit.py
+        └── venv (opsional)
+```
+
+---
+
+Selamat mencoba! 🚀

@@ -75,8 +75,8 @@ def generate_commit_message():
     
     
     # Mendapatkan pesan commit dari respons
-    print("Menerima respons dari API Gemini...")
-    print("response:",)
+    # print("Menerima respons dari API Gemini...")
+    # print("response:",)
     commit_message = response.text.strip()
     print("\n--- Pesan Commit yang Disarankan ---")
     print(commit_message)
@@ -92,6 +92,8 @@ def generate_commit_message():
   except Exception as e:
     print(f"Error saat berkomunikasi dengan API Gemini: {e}")
     sys.exit(1)
+    
+  git.Repo.close(repo)  # Menutup repo untuk menghindari kebocoran memori
     
 if __name__ == "__main__":
   generate_commit_message()
