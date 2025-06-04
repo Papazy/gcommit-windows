@@ -107,31 +107,44 @@ Langkah ini memungkinkan Anda menjalankan `gcommit` dari mana saja.
 
 ---
 
-## 🚀 Cara Menggunakan gcommit
+# 🚀 Cara Menggunakan gcommit
 
 1. Buka Command Prompt dan navigasi ke proyek Git Anda:
-   ```batch
-   cd folder-proyek-anda
-   ```
+  ```batch
+  cd folder-proyek-anda
+  ```
 
 2. Stage perubahan:
-   ```batch
-   git add .
-   ```
+  ```batch
+  git add .
+  ```
 
-3. Jalankan gcommit:
-   ```batch
-   gcommit
-   ```
+3. Jalankan gcommit untuk generate pesan commit otomatis:
+  ```batch
+  gcommit
+  ```
 
-4. Ikuti instruksi di terminal:
-   - Tekan `y` untuk menggunakan pesan commit yang disarankan
-   - Tekan `n` untuk membatalkan
+4. Jalankan gcommit dengan opsi `--push` untuk generate pesan commit dan push otomatis:
+  ```batch
+  gcommit --push
+  ```
 
-5. (opsional) push ke github
+5. Jalankan gcommit dengan opsi `--push origin main` untuk generate pesan commit dan push ke origin tertentu:
+  ```batch
+  gcommit --push origin main
+  ```
+
+6. Ikuti instruksi di terminal:
+  - Tekan `y` untuk menggunakan pesan commit yang disarankan
+  - Tekan `n` untuk membatalkan
+
+7. (opsional) push ke GitHub jika belum menggunakan opsi `--push`:
   ```batch
   git push
   ```
+
+> **Catatan**: Pastikan semua perubahan sudah di-stage sebelum menjalankan `gcommit`.
+
 ---
 
 ## 🧠 Tips
