@@ -33,6 +33,8 @@ git --version
 ```batch
 # Clone repository di direktori pilihan Anda
 git clone https://github.com/Papazy/gcommit-windows
+
+cd gcommit-windows
 ```
 ---
 
@@ -90,7 +92,7 @@ Langkah ini memungkinkan Anda menjalankan `gcommit` dari mana saja.
 1. Cari **"Edit the system environment variables"** di Start Menu.
 2. Klik tombol **Environment Variables...**.
 3. Di bagian **User variables**, pilih variabel `Path` dan klik **Edit...**.
-4. Klik **New** dan tambahkan path lengkap ke folder `gcommit` Anda (misalnya, `D:\gcommit\`).
+4. Klik **New** dan tambahkan path lengkap ke folder `gcommit-windos` Anda (misalnya, `D:\gcommit-windows\`).
 5. Klik **OK** pada semua jendela.
 
 > **Penting**: Tutup dan buka kembali Command Prompt/PowerShell agar perubahan PATH berlaku.
