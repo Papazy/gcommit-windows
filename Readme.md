@@ -8,7 +8,7 @@ Untuk Ubuntu, bisa lihat di [MhmmdIchsan/gcommit-ubuntu](https://github.com/Mhmm
 
 ## 🍎 MacOS Version
 
-Untuk MacOS, bisa lihat di [GhufranBkri/gcommit-macOS](https://github.com/GhufranBkri/gcommit-macOS)
+Untuk MacOS, bisa lihat di [GhufranBkri/gcommit-macOS](https://github.com/gufriends/gcommit-macOS)
 
 
 
